@@ -35,7 +35,7 @@ def scrape_urls(content, base_url):
         document.make_links_absolute(base_url)
 
     except Exception as e:
-        print('Failed parsing links from: ', base_url)
+        print('Failed parsing links from: ', base_url, e)
         return []
 
     return [link for element, attribute, link, pos in document.iterlinks()]
