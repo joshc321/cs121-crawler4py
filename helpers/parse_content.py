@@ -5,10 +5,36 @@ Parses text for tokenization as well as urls from given response content
 from lxml import html
 from lxml.html.clean import Cleaner
 
+import nltk
+nltk.download('popular')
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist
 
 import requests
+
+def scrape_info(content, base_url):
+    '''
+    scrapes urls and text from context
+    
+    @arg content : html string
+    @arg base_url : string
+    @return (list,string)
+    '''
+    try:
+        # define cleaner with settings
+        cleaner = Cleaner(style=True, javascript=True)
+        # clean html
+        cleaned_content = cleaner.clean_html(content)
+    except Exception as e:
+        print('Failed cleaning: ', base_url, e)
+        cleaned_content = content
+    
+    # todo add exception handling 
+    document = html.document_fromstring(cleaned_content)
+    document.make_links_absolute(base_url)
+    links = [link for element, attribute, link, pos in document.iterlinks()]
+    text = document.text_content()
+    return (links, text)
 
 def scrape_text(content, base_url):
     'takes in html string and base url returns text found in html'
@@ -53,4 +79,4 @@ def scrape_urls(content, base_url):
 if __name__ == '__main__':
     a = requests.get(r'https://github.com/joshc321/cs121-crawler4py')
     r = a.content
-    print(scrape_text(r, 'https://github.com/joshc321/cs121-crawler4py'))
+    print(token_freq(r, 'https://github.com/joshc321/cs121-crawler4py').items())
