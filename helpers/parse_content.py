@@ -29,10 +29,13 @@ def scrape_text(content, base_url):
         return ''
 
 def token_freq(content, base_url):
-    text = scrape_text(content, base_url)
+    #Return a FreqDist object(similar to map)
+    # Iterate through element to display results
+    # Can also delete elements
 
+    text = scrape_text(content, base_url)
     return FreqDist(word_tokenize(text.lower()))
-    
+
 def scrape_urls(content, base_url):
     'takes in html string and base url returns list of found urls'
 
