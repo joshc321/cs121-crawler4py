@@ -5,6 +5,9 @@ Parses text for tokenization as well as urls from given response content
 from lxml import html
 from lxml.html.clean import Cleaner
 
+from nltk.tokenize import word_tokenize
+from nltk import FreqDist
+
 import requests
 
 def scrape_text(content, base_url):
@@ -25,7 +28,11 @@ def scrape_text(content, base_url):
         print('Failed parsing text from: ', base_url, e)
         return ''
 
+def token_freq(content, base_url):
+    text = scrape_text(content, base_url)
 
+    return FreqDist(word_tokenize(text.lower()))
+    
 def scrape_urls(content, base_url):
     'takes in html string and base url returns list of found urls'
 
