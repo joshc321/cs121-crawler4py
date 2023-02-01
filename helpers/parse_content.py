@@ -59,7 +59,7 @@ def scrape_text(content, base_url):
         print('Failed parsing text from: ', base_url, e)
         return ''
 
-def token_freq(text: str, base_url: str):
+def token_freq(text: str):
     #Return a FreqDist object(similar to map)
     # Iterate through element to display results
     # Can also delete elements

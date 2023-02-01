@@ -24,7 +24,7 @@ def extract_next_links(url, resp):
     if(helpers.isValidStatus(resp.status) and is_valid(url)):
         links, text = helpers.scrape_info(resp.raw_response.content)
 
-        tokens =  helpers.token_freq(text, url)
+        tokens =  helpers.token_freq(text)
         
         # todo store tokens
 
