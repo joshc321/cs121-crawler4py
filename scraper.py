@@ -2,7 +2,7 @@ import re
 from urllib.parse import urlparse
 
 # helpers import
-import helpers
+from helpers import url_check, parse_content, status_check
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -21,10 +21,10 @@ def extract_next_links(url, resp):
 
     # need to decide if url or resp.url should be used
     #   url - requested url | resp.url - actual url
-    if(helpers.isValidStatus(resp.status) and is_valid(url)):
-        links, text = helpers.scrape_info(resp.raw_response.content)
+    if(status_check.isValidStatus(resp.status) and is_valid(url)):
+        links, text = parse_content.scrape_info(resp.raw_response.content)
 
-        tokens =  helpers.token_freq(text)
+        tokens =  parse_content.token_freq(text)
         
         # todo store tokens
 
@@ -41,7 +41,7 @@ def is_valid(url):
         if parsed.scheme not in {"http", "https"}:
             return False
 
-        if helpers.is_valid_domain(parsed) == True:
+        if url_check.is_valid_domain(parsed) == True:
             return False
 
         return not re.match(
