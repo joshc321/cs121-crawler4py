@@ -22,7 +22,7 @@ def extract_next_links(url, resp):
     # need to decide if url or resp.url should be used
     #   url - requested url | resp.url - actual url
     if(status_check.isValidStatus(resp.status) and is_valid(url)):
-        links, text = parse_content.scrape_info(resp.raw_response.content)
+        links, text = parse_content.scrape_info(resp.raw_response.content, resp.url)
 
         tokens =  parse_content.token_freq(text)
         
