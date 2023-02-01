@@ -10,6 +10,8 @@ nltk.download('popular')
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist
 
+from filter import EN_STOPWORDS
+
 import requests
 
 def scrape_info(content, base_url):
