@@ -83,6 +83,6 @@ def scrape_urls(content, base_url):
     return [link for element, attribute, link, pos in document.iterlinks()]
 
 if __name__ == '__main__':
-    a = requests.get(r'https://github.com/joshc321/cs121-crawler4py')
+    a = requests.get(r'https://www.ics.uci.edu')
     r = a.content
-    print(scrape_info(r, 'https://github.com/joshc321/cs121-crawler4py'))
+    print(scrape_info(r, 'https://www.ics.uci.edu'))
