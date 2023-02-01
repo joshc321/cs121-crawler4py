@@ -20,7 +20,7 @@ def scrape_info(content, base_url):
     
     @arg content : html string
     @arg base_url : string
-    @return (list,string)
+    @return (set,string)
     '''
     try:
         # define cleaner with settings
@@ -31,10 +31,15 @@ def scrape_info(content, base_url):
         print('Failed cleaning: ', base_url, e)
         cleaned_content = content
     
-    # todo add exception handling 
-    document = html.document_fromstring(cleaned_content)
-    document.make_links_absolute(base_url)
-    links = [link for element, attribute, link, pos in document.iterlinks()]
+    try:
+        # create document
+        document = html.document_fromstring(cleaned_content)
+        document.make_links_absolute(base_url)
+    except Exception as e:
+        print('Failed parsing document: ', base_url, e)
+        return (set(),[])
+    
+    links = {link for element, attribute, link, pos in document.iterlinks()}
     text = document.text_content()
     return (links, text)
 
@@ -56,12 +61,11 @@ def scrape_text(content, base_url):
         print('Failed parsing text from: ', base_url, e)
         return ''
 
-def token_freq(content, base_url):
+def token_freq(text: str):
     #Return a FreqDist object(similar to map)
     # Iterate through element to display results
     # Can also delete elements
 
-    text = scrape_text(content, base_url)
     return FreqDist(word_tokenize(text.lower()))
 
 def scrape_urls(content, base_url):

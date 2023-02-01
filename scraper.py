@@ -2,7 +2,7 @@ import re
 from urllib.parse import urlparse
 
 # helpers import
-import helpers
+from helpers import url_check, parse_content, status_check
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -18,7 +18,19 @@ def extract_next_links(url, resp):
     #         resp.raw_response.url: the url, again
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
-    return list()
+
+    # need to decide if url or resp.url should be used
+    #   url - requested url | resp.url - actual url
+    if(status_check.isValidStatus(resp.status) and is_valid(url)):
+        links, text = parse_content.scrape_info(resp.raw_response.content)
+
+        tokens =  parse_content.token_freq(text)
+        
+        # todo store tokens
+
+        return links
+
+    return []
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
@@ -26,10 +38,10 @@ def is_valid(url):
     # There are already some conditions that return False.
     try:
         parsed = urlparse(url)
-        if parsed.scheme not in set(["http", "https"]):
+        if parsed.scheme not in {"http", "https"}:
             return False
 
-        if helpers.url_check.is_valid_domain(parsed) == True:
+        if url_check.is_valid_domain(parsed) == True:
             return False
 
         return not re.match(
