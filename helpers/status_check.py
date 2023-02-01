@@ -11,7 +11,7 @@ def isValidStatus(status):
     # elif (resp.status_code == 304):
     #     #Not Modified 
     #     return False
-    elif (status >= 600 or status <= 606):
+    elif (status >= 600 and status <= 606):
         #Cache Errors
         return False
     return True

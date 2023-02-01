@@ -41,7 +41,7 @@ def is_valid(url):
         if parsed.scheme not in {"http", "https"}:
             return False
 
-        if url_check.is_valid_domain(parsed) == True:
+        if url_check.is_valid_domain(parsed) == False:
             return False
 
         return not re.match(

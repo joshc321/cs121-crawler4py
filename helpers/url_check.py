@@ -16,7 +16,6 @@ def is_valid_domain(parsedurl):
         @return bool
     '''
 
-    print(parsedurl.netloc)
     return bool(re.search(r'\.(ics|cs|informatics|stat)\.uci\.edu$', parsedurl.netloc))
 
 
