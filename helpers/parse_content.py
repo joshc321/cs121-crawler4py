@@ -29,9 +29,14 @@ def scrape_info(content, base_url):
         print('Failed cleaning: ', base_url, e)
         cleaned_content = content
     
-    # todo add exception handling 
-    document = html.document_fromstring(cleaned_content)
-    document.make_links_absolute(base_url)
+    try:
+        # create document
+        document = html.document_fromstring(cleaned_content)
+        document.make_links_absolute(base_url)
+    except Exception as e:
+        print('Failed parsing document: ', base_url, e)
+        return ([],[])
+    
     links = [link for element, attribute, link, pos in document.iterlinks()]
     text = document.text_content()
     return (links, text)
