@@ -83,4 +83,4 @@ def scrape_urls(content, base_url):
 if __name__ == '__main__':
     a = requests.get(r'https://github.com/joshc321/cs121-crawler4py')
     r = a.content
-    print(token_freq(r, 'https://github.com/joshc321/cs121-crawler4py').items())
+    print(scrape_info(r, 'https://github.com/joshc321/cs121-crawler4py'))
