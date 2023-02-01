@@ -12,6 +12,8 @@ from nltk import FreqDist
 
 from helpers.filter import EN_STOPWORDS
 
+from urllib.parse import urldefrag
+
 import requests
 
 def scrape_info(content, base_url):
@@ -39,7 +41,7 @@ def scrape_info(content, base_url):
         print('Failed parsing document: ', base_url, e)
         return (set(),[])
     
-    links = {link for element, attribute, link, pos in document.iterlinks()}
+    links = {urldefrag(link).url for element, attribute, link, pos in document.iterlinks()}
     text = document.text_content()
     return (links, text)
 
