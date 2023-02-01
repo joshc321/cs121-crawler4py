@@ -23,12 +23,16 @@ class Worker(Thread):
             if not tbd_url:
                 self.logger.info("Frontier is empty. Stopping Crawler.")
                 break
+            self.logger.info(f'Trying to download {tbd_url}')
             resp = download(tbd_url, self.config, self.logger)
             self.logger.info(
                 f"Downloaded {tbd_url}, status <{resp.status}>, "
                 f"using cache {self.config.cache_server}.")
-            scraped_urls = scraper.scraper(tbd_url, resp)
-            for scraped_url in scraped_urls:
-                self.frontier.add_url(scraped_url)
+            
+            if not resp.error:
+                scraped_urls = scraper.scraper(tbd_url, resp)
+                for scraped_url in scraped_urls:
+                    self.frontier.add_url(scraped_url)
+
             self.frontier.mark_url_complete(tbd_url)
             time.sleep(self.config.time_delay)

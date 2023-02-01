@@ -15,5 +15,6 @@ class Config(object):
 
         self.seed_urls = config["CRAWLER"]["SEEDURL"].split(",")
         self.time_delay = float(config["CRAWLER"]["POLITENESS"])
+        self.timeout = float(config["CRAWLER"]["TIMEOUT"])
 
         self.cache_server = None
