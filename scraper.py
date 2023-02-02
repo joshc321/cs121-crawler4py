@@ -39,11 +39,12 @@ def extract_next_links(url, resp, fingerprints):
                 token_freq.pop(stop_word)
 
         fingerprint = simhash(token_freq)
-        fingerprints.add(fingerprint)
 
         if is_unique(fingerprints, fingerprint) == False:
             # duplicate page ignore it
             return []
+        
+        fingerprints[fingerprint] = url
 
         # TODO save fingerprint for similarity comparisons
         
@@ -80,11 +81,15 @@ def is_valid(url):
         raise
 
 def is_unique(fingerprints, fingerprint):
-    THRESHOLD = 0.92
+    THRESHOLD = 0.999
 
     if fingerprint in fingerprints:
+        print('duplicate ', fingerprints[fingerprint])
         return False
     
-    for fp in fingerprints:
+    for fp,url in fingerprints.items():
         if similarity(fp, fingerprint) > THRESHOLD:
+            print('similar to', url, similarity(fp, fingerprint))
             return False
+
+    return True

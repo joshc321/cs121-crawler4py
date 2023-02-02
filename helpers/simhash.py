@@ -1,9 +1,11 @@
-HASH_LENGTH = 64 # length of hash's produced by builtin hash
+HASH_LENGTH = 256 # length of hash's produced by builtin hash
 _DEBUG = False
 
 if _DEBUG:
     HASH_LENGTH = 8
     from nltk import FreqDist
+
+import hashlib
 
 def simhash(tokens):
     '''
@@ -34,7 +36,7 @@ def simhash(tokens):
         tokens = FreqDist(['tropical', 'tropical', 'fish', 'fish', 'include', 'found', 'environments', 'around', 'world', 'including', 'both', 'freshwater', 'salt', 'water', 'species'])
 
     for word, freq in tokens.items():
-        word_hash = hash(word)
+        word_hash = int(hashlib.sha256(word.encode('utf-8')).hexdigest(),16)
 
         if _DEBUG:
             word_hash = fake_hash[word]
