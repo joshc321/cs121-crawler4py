@@ -25,7 +25,7 @@ def extract_next_links(url, resp, fingerprints):
 
     # need to decide if url or resp.url should be used
     #   url - requested url | resp.url - actual url
-    if(status_check.isValidStatus(resp) and is_valid(url) and is_unique(fingerprints, fingerprint)):
+    if(status_check.isValidStatus(resp) and is_valid(url)):
         links, text = parse_content.scrape_info(resp.raw_response.content, resp.url)
 
         tokens = word_tokenize(text.lower())
@@ -40,6 +40,10 @@ def extract_next_links(url, resp, fingerprints):
 
         fingerprint = simhash(token_freq)
         fingerprints.add(fingerprint)
+
+        if is_unique(fingerprints, fingerprint) == False:
+            # duplicate page ignore it
+            return []
 
         # TODO save fingerprint for similarity comparisons
         
