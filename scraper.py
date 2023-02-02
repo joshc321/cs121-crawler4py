@@ -5,14 +5,14 @@ from nltk.tokenize import word_tokenize
 # helpers import
 from helpers import url_check, parse_content, status_check
 from helpers.stopwords import EN_STOPWORDS
-from helpers.simhash import simhash
+from helpers.simhash import simhash, similarity
 
 
-def scraper(url, resp):
-    links = extract_next_links(url, resp)
+def scraper(url, resp, fingerprints):
+    links = extract_next_links(url, resp, fingerprints)
     return [link for link in links if is_valid(link)]
 
-def extract_next_links(url, resp):
+def extract_next_links(url, resp, fingerprints):
     # Implementation required.
     # url: the URL that was used to get the page
     # resp.url: the actual url of the page
@@ -25,7 +25,7 @@ def extract_next_links(url, resp):
 
     # need to decide if url or resp.url should be used
     #   url - requested url | resp.url - actual url
-    if(status_check.isValidStatus(resp.status) and is_valid(url)):
+    if(status_check.isValidStatus(resp.status) and is_valid(url) and is_unique(fingerprints, fingerprint)):
         links, text = parse_content.scrape_info(resp.raw_response.content, resp.url)
 
         tokens = word_tokenize(text.lower())
@@ -39,6 +39,8 @@ def extract_next_links(url, resp):
                 token_freq.pop(stop_word)
 
         fingerprint = simhash(token_freq)
+        fingerprints.add(fingerprint)
+
         # TODO save fingerprint for similarity comparisons
         
         # todo store tokens
@@ -72,3 +74,13 @@ def is_valid(url):
     except TypeError:
         print ("TypeError for ", parsed)
         raise
+
+def is_unique(fingerprints, fingerprint):
+    THRESHOLD = 0.92
+
+    if fingerprint in fingerprints:
+        return False
+    
+    for fp in fingerprints:
+        if similarity(fp, fingerprint) > THRESHOLD:
+            return False

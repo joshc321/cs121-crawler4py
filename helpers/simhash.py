@@ -73,7 +73,7 @@ if __name__ == '__main__':
     from parse_content import scrape_info, token_freq
     from nltk.tokenize import word_tokenize
 
-    resp1 = requests.get('https://www.timeanddate.com/calendar/?year=2018&country=1')
+    resp1 = requests.get('https://www.timeanddate.com/calendar/monthly.html?year=2021&month=2&country=1')
     resp2 = requests.get('https://www.timeanddate.com/calendar/monthly.html?year=2023&month=1&country=1')
 
     links1, text1 = scrape_info(resp1.content, resp1.url)

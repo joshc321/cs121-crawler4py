@@ -12,6 +12,10 @@ class Worker(Thread):
         self.logger = get_logger(f"Worker-{worker_id}", "Worker")
         self.config = config
         self.frontier = frontier
+
+        # temporary
+        self.fingerprints = set()
+
         # basic check for requests in scraper
         assert {getsource(scraper).find(req) for req in {"from requests import", "import requests"}} == {-1}, "Do not use requests in scraper.py"
         assert {getsource(scraper).find(req) for req in {"from urllib.request import", "import urllib.request"}} == {-1}, "Do not use urllib.request in scraper.py"
@@ -30,7 +34,7 @@ class Worker(Thread):
                 f"using cache {self.config.cache_server}.")
             
             if not resp.error:
-                scraped_urls = scraper.scraper(tbd_url, resp)
+                scraped_urls = scraper.scraper(tbd_url, resp, self.fingerprints)
                 for scraped_url in scraped_urls:
                     self.frontier.add_url(scraped_url)
 
