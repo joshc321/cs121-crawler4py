@@ -65,12 +65,12 @@ def scrape_text(content, base_url):
         print('Failed parsing text from: ', base_url, e)
         return ''
 
-def token_freq(text: str):
+def token_freq(tokens: List[str]):
     #Return a FreqDist object(similar to map)
     # Iterate through element to display results
     # Can also delete elements
 
-    return FreqDist(word_tokenize(text.lower()))
+    return FreqDist(tokens)
 
 def scrape_urls(content, base_url):
     'takes in html string and base url returns list of found urls'

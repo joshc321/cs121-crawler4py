@@ -1,9 +1,10 @@
 import re
 from urllib.parse import urlparse
+from nltk.tokenize import word_tokenize
 
 # helpers import
 from helpers import url_check, parse_content, status_check
-from helpers.filter import EN_STOPWORDS
+from stopwords import EN_STOPWORDS
 
 
 def scraper(url, resp):
@@ -26,11 +27,15 @@ def extract_next_links(url, resp):
     if(status_check.isValidStatus(resp.status) and is_valid(url)):
         links, text = parse_content.scrape_info(resp.raw_response.content, resp.url)
 
-        tokens = parse_content.token_freq(text)
+        tokens = word_tokenize(text.lower())
+        page_length = len(tokens)
+        # TODO save page length
+
+        token_freq = parse_content.token_freq(text)
         # remove stop words
         for stop_word in EN_STOPWORDS:
             if stop_word in tokens:
-                tokens.pop(stop_word)
+                token_freq.pop(stop_word)
         
         # todo store tokens
 
