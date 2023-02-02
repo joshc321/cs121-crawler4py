@@ -10,7 +10,7 @@ nltk.download('popular')
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist
 
-from helpers.filter import EN_STOPWORDS
+from stopwords import EN_STOPWORDS
 
 from urllib.parse import urldefrag
 
