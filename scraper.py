@@ -4,7 +4,8 @@ from nltk.tokenize import word_tokenize
 
 # helpers import
 from helpers import url_check, parse_content, status_check
-from stopwords import EN_STOPWORDS
+from helpers.stopwords import EN_STOPWORDS
+from helpers.simhash import simhash
 
 
 def scraper(url, resp):
@@ -34,8 +35,11 @@ def extract_next_links(url, resp):
         token_freq = parse_content.token_freq(text)
         # remove stop words
         for stop_word in EN_STOPWORDS:
-            if stop_word in tokens:
+            if stop_word in token_freq:
                 token_freq.pop(stop_word)
+
+        fingerprint = simhash(token_freq)
+        # TODO save fingerprint for similarity comparisons
         
         # todo store tokens
 

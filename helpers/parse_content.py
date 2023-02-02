@@ -10,7 +10,10 @@ nltk.download('popular')
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist
 
-from stopwords import EN_STOPWORDS
+try:
+    from stopwords import EN_STOPWORDS
+except ModuleNotFoundError:
+    from helpers.stopwords import EN_STOPWORDS
 
 from urllib.parse import urldefrag
 
@@ -65,10 +68,9 @@ def scrape_text(content, base_url):
         print('Failed parsing text from: ', base_url, e)
         return ''
 
-def token_freq(tokens: List[str]):
+def token_freq(tokens: list[str]):
     #Return a FreqDist object(similar to map)
     # Iterate through element to display results
-    # Can also delete elements
 
     return FreqDist(tokens)
 
@@ -89,4 +91,6 @@ def scrape_urls(content, base_url):
 if __name__ == '__main__':
     a = requests.get(r'https://www.ics.uci.edu')
     r = a.content
-    print(scrape_info(r, 'https://www.ics.uci.edu'))
+    links, text = scrape_info(r, 'https://www.ics.uci.edu')
+    # print(links)
+    print(token_freq(text))
