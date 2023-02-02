@@ -68,9 +68,15 @@ def scrape_text(content, base_url):
 def token_freq(text: str):
     #Return a FreqDist object(similar to map)
     # Iterate through element to display results
-    # Can also delete elements
 
-    return FreqDist(word_tokenize(text.lower()))
+    freq_list = list()
+    print('generating token_freq')
+
+    for k, v in FreqDist(word_tokenize(text.lower())).items():
+        if k not in EN_STOPWORDS:
+            freq_list.append((k, v))
+
+    return freq_list
 
 def scrape_urls(content, base_url):
     'takes in html string and base url returns list of found urls'
@@ -89,4 +95,6 @@ def scrape_urls(content, base_url):
 if __name__ == '__main__':
     a = requests.get(r'https://www.ics.uci.edu')
     r = a.content
-    print(scrape_info(r, 'https://www.ics.uci.edu'))
+    links, text = scrape_info(r, 'https://www.ics.uci.edu')
+    # print(links)
+    print(token_freq(text))
