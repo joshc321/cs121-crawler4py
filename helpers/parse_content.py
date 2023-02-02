@@ -72,14 +72,7 @@ def token_freq(text: str):
     #Return a FreqDist object(similar to map)
     # Iterate through element to display results
 
-    freq_list = list()
-    print('generating token_freq')
-
-    for k, v in FreqDist(word_tokenize(text.lower())).items():
-        if k not in EN_STOPWORDS:
-            freq_list.append((k, v))
-
-    return freq_list
+    return FreqDist(word_tokenize(text.lower()))
 
 def scrape_urls(content, base_url):
     'takes in html string and base url returns list of found urls'
