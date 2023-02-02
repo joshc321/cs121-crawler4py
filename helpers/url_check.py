@@ -7,7 +7,7 @@ notes:
 '''
 import re
 
-VALID_URL_PATTERN = re.compile(r'(?P<subdomain>.*)?\.(ics|cs|informatics|stat)\.uci\.edu')
+VALID_URL_PATTERN = re.compile(r'(?P<subdomain>.*?)\.?(ics|cs|informatics|stat)\.uci\.edu$')
 
 def is_valid_domain(parsedurl):
     '''
@@ -39,6 +39,10 @@ def get_subdomain(parsedurl):
 if __name__ == '__main__':
     import urllib.parse
 
-    parsed = urllib.parse.urlparse('https://one.two.ics.uci.edu')
+    parsed = urllib.parse.urlparse('https://ics.uci.edu')
+    print(is_valid_domain(parsed))
+    print(get_subdomain(parsed))
+
+    parsed = urllib.parse.urlparse('https://one.two.stat.uci.edu')
     print(is_valid_domain(parsed))
     print(get_subdomain(parsed))
