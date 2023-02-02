@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 
 # helpers import
 from helpers import url_check, parse_content, status_check
-from helpers.filter import EN_STOPWORDS
+from helpers.stopwords import EN_STOPWORDS
 
 
 def scraper(url, resp):
