@@ -3,6 +3,8 @@ Checks status of response code and determines if it is a valid response
 
 Need to read into more status codes
 
+Implement this function into extract_next_link function
+
 '''
 
 def isValidStatus(resp):

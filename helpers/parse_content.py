@@ -19,6 +19,9 @@ from urllib.parse import urldefrag
 
 import requests
 
+EN_STOPWORDS = {'us', 'most', 'further', 'did', 'these', 'while', 'doing', 'am', 'not', 'between', 'was', 'there', 'her', 'on', 'nor', 'would', 'theirs', 'if', 'because', 'him', 'for', 'our', 'under', 'against', 'could', 'once', 'are', 'is', 'it', 'own', 'we', 'that', 'up', 'she', 'both', 'when', 'other', 'he', 'with', 'his', 'will', 'who', 'than', 'more', 'very', 'their', 'from', 'same', 'they', 'ours', 'during', 'only', 'by', 'had', 'or', 'of', 'how', 'no', 'should', 'himself', 'ourselves', 'them', 'my', 'in', 'those', 'being', 'be', 'here', 'herself', 'been', 'few', 'below', 'any', 'about', 'an', 'cannot', 'so', 'before', 'hers', 'until', 'again', 'to', 'a', 'whom', 'myself', 'where', 'themselves', 'having', 'you', 'then', 'down', 'why', 'all', 'and', 'were', 'which', 'your', 'this', 'some', 'yours', 'such', 'must', 'above', 'yourselves', 'has', 'but', 'itself', 'does', 'me', 'yourself', 'shall', 'have', 'i', 'let', 'as', 'its', 'out', 'the', 'into', 'what', 'after', 'do', 'through', 'too', 'at', 'each', 'over', 'off', 'ought'}
+
+
 def scrape_info(content, base_url):
     '''
     scrapes urls and text from context
@@ -69,10 +72,18 @@ def scrape_text(content, base_url):
         return ''
 
 def token_freq(tokens: list[str]):
-    #Return a FreqDist object(similar to map)
+    # Return a FreqDist object(similar to map)
     # Iterate through element to display results
 
-    return FreqDist(tokens)
+    frequencyDistribution = FreqDist(tokens)
+
+    for word in EN_STOPWORDS:
+        try:
+            frequencyDistribution.pop(word)
+        except KeyError:
+            pass
+    return frequencyDistribution
+
 
 def scrape_urls(content, base_url):
     'takes in html string and base url returns list of found urls'
