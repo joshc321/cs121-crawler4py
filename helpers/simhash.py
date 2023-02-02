@@ -56,3 +56,14 @@ def simhash(tokens):
         print(bin(fingerprint))
 
     return fingerprint
+
+def similarity(fingerprint1, fingerprint2):
+    simbit = ~ (fingerprint1 ^ fingerprint2) # XNOR, 1s where bits are the same, 0s where they are different
+
+    num_same = 0
+
+    for i in range(HASH_LENGTH):
+        if simbit >> i & 1 == 1:
+            num_same += 1
+    
+    return float(num_same) / HASH_LENGTH
