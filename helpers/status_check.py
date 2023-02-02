@@ -13,7 +13,7 @@ def isValidStatus(resp):
         return False
 
     # For now, ignore all 300 status code (redirect errors)
-    elif (resp.status >= 300 or resp.status < 400 ):
+    elif (resp.status >= 300 and resp.status < 400 ):
         return False
     
     # Not Modified Error Code
@@ -22,7 +22,7 @@ def isValidStatus(resp):
     #     return False
 
     # Error 4XX should have been dealt with already 
-    elif (resp.status >= 600 or resp.status_code <= 606):
+    elif (resp.status >= 600 and resp.status <= 606):
         # Cache Errors
         return False
     return True
