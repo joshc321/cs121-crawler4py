@@ -92,5 +92,5 @@ if __name__ == '__main__':
     a = requests.get(r'https://www.ics.uci.edu')
     r = a.content
     links, text = scrape_info(r, 'https://www.ics.uci.edu')
-    # print(links)
+    print(links)
     print(token_freq(text))
