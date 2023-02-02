@@ -45,7 +45,7 @@ def scrape_info(content, base_url):
         document.make_links_absolute(base_url)
     except Exception as e:
         print('Failed parsing document: ', base_url, e)
-        return (set(),[])
+        return (set(),'')
     
     # requote_uri turns unicode characters to ascii, e.g. heart emoji to %E2%9D%A4, space to %20
     # also fixes ascii some ascii characters e.g. %7E to ~

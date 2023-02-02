@@ -1,9 +1,11 @@
-HASH_LENGTH = 64 # length of hash's produced by builtin hash
+HASH_LENGTH = 256 # length of hash's produced by builtin hash
 _DEBUG = False
 
 if _DEBUG:
     HASH_LENGTH = 8
     from nltk import FreqDist
+
+import hashlib
 
 def simhash(tokens):
     '''
@@ -34,7 +36,7 @@ def simhash(tokens):
         tokens = FreqDist(['tropical', 'tropical', 'fish', 'fish', 'include', 'found', 'environments', 'around', 'world', 'including', 'both', 'freshwater', 'salt', 'water', 'species'])
 
     for word, freq in tokens.items():
-        word_hash = hash(word)
+        word_hash = int(hashlib.sha256(word.encode('utf-8')).hexdigest(),16)
 
         if _DEBUG:
             word_hash = fake_hash[word]
@@ -67,3 +69,27 @@ def similarity(fingerprint1, fingerprint2):
             num_same += 1
     
     return float(num_same) / HASH_LENGTH
+
+if __name__ == '__main__':
+    import requests
+    from parse_content import scrape_info, token_freq
+    from nltk.tokenize import word_tokenize
+
+    resp1 = requests.get('https://www.timeanddate.com/calendar/monthly.html?year=2021&month=2&country=1')
+    resp2 = requests.get('https://www.timeanddate.com/calendar/monthly.html?year=2023&month=1&country=1')
+
+    links1, text1 = scrape_info(resp1.content, resp1.url)
+    links2, text2 = scrape_info(resp2.content, resp2.url)
+
+    tokens1 = word_tokenize(text1.lower())
+    tokens2 = word_tokenize(text2.lower())
+
+    token_freq1 = token_freq(tokens1)
+    token_freq2 = token_freq(tokens2)
+
+    h1 = simhash(token_freq1)
+    h2 = simhash(token_freq2)
+    print(h1)
+    print(h2)
+
+    print(similarity(h1,h2))

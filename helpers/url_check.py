@@ -7,7 +7,7 @@ notes:
 '''
 import re
 
-VALID_URL_PATTERN = re.compile(r'(?P<subdomain>.*?)\.?(ics|cs|informatics|stat)\.uci\.edu$')
+VALID_URL_PATTERN = re.compile(r'(?:(?P<subdomain>.*)\.)?(ics|cs|informatics|stat)\.uci\.edu$')
 
 def is_valid_domain(parsedurl):
     '''
@@ -18,7 +18,7 @@ def is_valid_domain(parsedurl):
         @return bool
     '''
 
-    regex_match = re.search(VALID_URL_PATTERN, parsedurl.netloc)
+    regex_match = re.match(VALID_URL_PATTERN, parsedurl.netloc)
     return bool(regex_match)
 
 def get_subdomain(parsedurl):
@@ -29,7 +29,7 @@ def get_subdomain(parsedurl):
         @arg parsedurl urllib.parse.urlparse
         @return str
     '''
-    regex_match = re.search(VALID_URL_PATTERN, parsedurl.netloc)
+    regex_match = re.match(VALID_URL_PATTERN, parsedurl.netloc)
     
     if regex_match:
         return regex_match.group('subdomain')
@@ -44,5 +44,9 @@ if __name__ == '__main__':
     print(get_subdomain(parsed))
 
     parsed = urllib.parse.urlparse('https://one.two.stat.uci.edu')
+    print(is_valid_domain(parsed))
+    print(get_subdomain(parsed))
+
+    parsed = urllib.parse.urlparse('https://onetwostat.uci.edu')
     print(is_valid_domain(parsed))
     print(get_subdomain(parsed))
