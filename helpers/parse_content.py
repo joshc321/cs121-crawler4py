@@ -12,7 +12,7 @@ from nltk import FreqDist
 
 from helpers.filter import EN_STOPWORDS
 
-from urllib.parse import urldefrag, unquote
+from urllib.parse import urldefrag, unquote, quote
 
 import requests
 
@@ -41,7 +41,11 @@ def scrape_info(content, base_url):
         print('Failed parsing document: ', base_url, e)
         return (set(),[])
     
-    links = {unquote(urldefrag(link).url) for element, attribute, link, pos in document.iterlinks()}
+    # unquote will change strings to unicode, such as %7E to ~
+    # quote will put the string back into ascii e.g spaces to %20, unicode characters to % stuff, ~ will remain unchanged though
+    # for some reason some urls on the will will ascii characters such as ~ as %7E so this double process is needed
+    # safe='/:' keeps the path and scheme from being converted to % stuff
+    links = {quote(unquote(urldefrag(link).url), safe='/:') for element, attribute, link, pos in document.iterlinks()}
     text = document.text_content()
     return (links, text)
 
