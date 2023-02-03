@@ -56,7 +56,7 @@ def extract_next_links(url, resp, fingerprints):
         # TODO save fingerprint for similarity comparisons
         
         # todo store tokens
-        common_words(token_freq, url)
+        common_words.update_data_shelf(token_freq, url)
 
 
         return links
