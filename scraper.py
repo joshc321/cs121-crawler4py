@@ -8,6 +8,8 @@ from helpers.stopwords import EN_STOPWORDS
 from helpers.simhash import simhash, similarity
 
 
+LOW_VALUE = 25
+
 def scraper(url, resp, fingerprints):
     links = extract_next_links(url, resp, fingerprints)
     return [link for link in links if is_valid(link)]
@@ -25,18 +27,23 @@ def extract_next_links(url, resp, fingerprints):
 
     # need to decide if url or resp.url should be used
     #   url - requested url | resp.url - actual url
-    if(status_check.isValidStatus(resp) and is_valid(url)):
+    if(status_check.is_valid_status(resp) and is_valid(url)):
         links, text = parse_content.scrape_info(resp.raw_response.content, resp.url)
 
         tokens = word_tokenize(text.lower())
         page_length = len(tokens)
         # TODO save page length
 
+        
+
         token_freq = parse_content.token_freq(text)
         # remove stop words
         for stop_word in EN_STOPWORDS:
             if stop_word in token_freq:
                 token_freq.pop(stop_word)
+
+        if len(token_freq) < LOW_VALUE:
+            return []
 
         fingerprint = simhash(token_freq)
 
@@ -49,7 +56,7 @@ def extract_next_links(url, resp, fingerprints):
         # TODO save fingerprint for similarity comparisons
         
         # todo store tokens
-        common_words.appendToShelf(token_freq)
+        common_words.update_data_shelf(token_freq, url)
 
 
         return links
@@ -68,6 +75,9 @@ def is_valid(url):
         if url_check.is_valid_domain(parsed) == False:
             return False
 
+        if "archive.ics.uci.edu/ml/datasets.php" in url:
+            return False
+
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico|svg"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
@@ -83,7 +93,7 @@ def is_valid(url):
         raise
 
 def is_unique(fingerprints, fingerprint):
-    THRESHOLD = 0.96
+    THRESHOLD = 0.98
 
     if fingerprint in fingerprints:
         print('duplicate ', fingerprints[fingerprint])
