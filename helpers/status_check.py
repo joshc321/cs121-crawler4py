@@ -9,22 +9,12 @@ Implement this function into extract_next_link function
 
 def isValidStatus(resp):
     # Server Should send 200 Status Codes
-
-    if (resp.status == 204):
-        #No Content
-        return False
-
-    # For now, ignore all 300 status code (redirect errors)
-    elif (resp.status >= 300 and resp.status < 400 ):
-        return False
-    
-    # Not Modified Error Code
-    # elif (resp.status_code == 304):
-    #     #Not Modified 
-    #     return False
-
-    # Error 4XX should have been dealt with already 
-    elif (resp.status >= 600 and resp.status <= 606):
-        # Cache Errors
-        return False
-    return True
+    # 1XX Error Codes information reqests
+    # 204 Error Codes No Content
+    # 3XX Redirects (Blank Pages)
+    # 4XX Client Error
+    # 5XX Server Error
+    # 600-606 Cache Error
+    if ((resp.status >= 200) and resp.status != 204 ):
+        return True
+    return False
