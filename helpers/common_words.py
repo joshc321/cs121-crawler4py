@@ -14,15 +14,15 @@ def appendToShelf(freqDist):
     try:
         shelf = shelve.open("commonWordsShelf.db")
         
-        if "mainShelf" in shelf:
-            fDist = shelf["mainShelf"]
+        if "commonData" in shelf:
+            fDist = shelf["commonData"]
 
             for token in freqDist:
                 fDist[token] += freqDist[token]
-            shelf["mainShelf"] = fDist
+            shelf["commonData"] = fDist
 
         else:
-            shelf["mainShelf"] = freqDist
+            shelf["commonData"] = freqDist
 
     finally:
         shelf.close()
@@ -31,8 +31,8 @@ def getCommonWords():
     # Returns a list of tuples (token, frequency) of size 50 
     try:
         shelf = shelve.open("commonWordsShelf.db")
-        if "mainShelf" in shelf:
-            fDist = shelf["mainShelf"]
+        if "commonData" in shelf:
+            fDist = shelf["commonData"]
             return fDist.most_common(50)
 
     finally:
