@@ -35,6 +35,7 @@ def simhash(tokens):
         }
         tokens = FreqDist(['tropical', 'tropical', 'fish', 'fish', 'include', 'found', 'environments', 'around', 'world', 'including', 'both', 'freshwater', 'salt', 'water', 'species'])
 
+    # build vector V
     for word, freq in tokens.items():
         word_hash = int(hashlib.sha256(word.encode('utf-8')).hexdigest(),16)
 
@@ -49,6 +50,7 @@ def simhash(tokens):
             elif wordbit == 0: # subtract weight
                 V[i] -= freq
 
+    # build fingerprint
     for i, vbit in enumerate(V):
         if vbit > 0: # positive so 1 in fingerprint, add
             fingerprint += (1 << i)
@@ -60,6 +62,10 @@ def simhash(tokens):
     return fingerprint
 
 def similarity(fingerprint1, fingerprint2):
+    '''
+    Takes two fingerprints
+    Returns a percentage as a float indicating how many bits they have in common
+    '''
     simbit = ~ (fingerprint1 ^ fingerprint2) # XNOR, 1s where bits are the same, 0s where they are different
 
     num_same = 0
