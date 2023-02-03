@@ -1,4 +1,4 @@
-HASH_LENGTH = 256 # length of hash's produced by builtin hash
+HASH_LENGTH = 256
 _DEBUG = False
 
 if _DEBUG:
@@ -15,7 +15,7 @@ def simhash(tokens):
 
     fingerprint = 0
 
-    V = [0 for i in range(HASH_LENGTH)]
+    V = [0] * HASH_LENGTH
 
     if _DEBUG:
         fake_hash = {
@@ -65,8 +65,7 @@ def similarity(fingerprint1, fingerprint2):
     num_same = 0
 
     for i in range(HASH_LENGTH):
-        if simbit >> i & 1 == 1:
-            num_same += 1
+        num_same += simbit >> i & 1
     
     return float(num_same) / HASH_LENGTH
 
