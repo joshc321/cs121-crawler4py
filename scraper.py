@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 from nltk.tokenize import word_tokenize
 
 # helpers import
-from helpers import url_check, parse_content, status_check
+from helpers import url_check, parse_content, status_check, stopwords
 from helpers.stopwords import EN_STOPWORDS
 from helpers.simhash import simhash, similarity
 
@@ -50,6 +50,7 @@ def extract_next_links(url, resp, fingerprints):
         
         # todo store tokens
 
+
         return links
 
     return []
@@ -81,7 +82,7 @@ def is_valid(url):
         raise
 
 def is_unique(fingerprints, fingerprint):
-    THRESHOLD = 0.999
+    THRESHOLD = 0.96
 
     if fingerprint in fingerprints:
         print('duplicate ', fingerprints[fingerprint])
