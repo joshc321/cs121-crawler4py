@@ -9,10 +9,10 @@ import shelve
 from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 
-def appendToShelf(freqDist):
+def update_common_word_shelf(freqDist):
     # Adds Frequency Distribution to Shelf
     try:
-        shelf = shelve.open("commonWordsShelf.db")
+        shelf = shelve.open("dataShelf.db")
         
         if "commonData" in shelf:
             fDist = shelf["commonData"]
@@ -27,10 +27,10 @@ def appendToShelf(freqDist):
     finally:
         shelf.close()
 
-def getCommonWords():
+def get_common_words():
     # Returns a list of tuples (token, frequency) of size 50 
     try:
-        shelf = shelve.open("commonWordsShelf.db")
+        shelf = shelve.open("dataShelf.db")
         if "commonData" in shelf:
             fDist = shelf["commonData"]
             return fDist.most_common(50)
@@ -40,12 +40,12 @@ def getCommonWords():
 
 
 if __name__ == "__main__":
-
     # Sample/Test 
     sample = "I Like Boo. Boo is my favorite dog"
     fdist = FreqDist()
     for word in word_tokenize(sample):
         fdist[word.lower()] += 1
-    appendToShelf(fdist)
-    getCommonWords()
+
+    update_common_word_shelf(fdist)
+    get_common_words()
 

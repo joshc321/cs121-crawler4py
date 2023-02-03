@@ -1,13 +1,12 @@
 '''
 Checks status of response code and determines if it is a valid response
 
-Need to read into more status codes
 
 Implement this function into extract_next_link function
 
 '''
 
-def isValidStatus(resp):
+def is_valid_status(resp):
     # Server Should send 200 Status Codes
     # 1XX Error Codes information reqests
     # 204 Error Codes No Content
