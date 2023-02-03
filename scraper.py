@@ -34,6 +34,8 @@ def extract_next_links(url, resp, fingerprints):
         page_length = len(tokens)
         # TODO save page length
 
+        
+
         token_freq = parse_content.token_freq(text)
         # remove stop words
         for stop_word in EN_STOPWORDS:
@@ -54,7 +56,7 @@ def extract_next_links(url, resp, fingerprints):
         # TODO save fingerprint for similarity comparisons
         
         # todo store tokens
-        common_words.appendToShelf(token_freq)
+        common_words(token_freq, url)
 
 
         return links
