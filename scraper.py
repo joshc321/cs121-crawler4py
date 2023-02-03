@@ -36,11 +36,16 @@ def extract_next_links(url, resp, fingerprints):
 
         
 
-        token_freq = parse_content.token_freq(text)
+        token_freq = parse_content.token_freq(tokens)
         # remove stop words
         for stop_word in EN_STOPWORDS:
             if stop_word in token_freq:
                 token_freq.pop(stop_word)
+        
+        # remove puncuation and since characters
+        for k in set(token_freq.keys()):
+            if len(k) < 2:
+                token_freq.pop(k)
 
         if len(token_freq) < LOW_VALUE:
             return []
