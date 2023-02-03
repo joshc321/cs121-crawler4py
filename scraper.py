@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 from nltk.tokenize import word_tokenize
 
 # helpers import
-from helpers import url_check, parse_content, status_check, stopwords
+from helpers import url_check, parse_content, status_check, common_words
 from helpers.stopwords import EN_STOPWORDS
 from helpers.simhash import simhash, similarity
 
@@ -49,6 +49,7 @@ def extract_next_links(url, resp, fingerprints):
         # TODO save fingerprint for similarity comparisons
         
         # todo store tokens
+        common_words.appendToShelf(token_freq)
 
 
         return links
