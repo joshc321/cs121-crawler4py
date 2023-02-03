@@ -14,7 +14,7 @@ class Worker(Thread):
         self.frontier = frontier
 
         # temporary
-        self.fingerprints = set()
+        self.fingerprints = dict()
 
         # basic check for requests in scraper
         assert {getsource(scraper).find(req) for req in {"from requests import", "import requests"}} == {-1}, "Do not use requests in scraper.py"
@@ -22,11 +22,27 @@ class Worker(Thread):
         super().__init__(daemon=True)
         
     def run(self):
+
+        max_runs = 10
+        current_runs = 0
         while True:
             tbd_url = self.frontier.get_tbd_url()
             if not tbd_url:
                 self.logger.info("Frontier is empty. Stopping Crawler.")
-                break
+                current_runs+=1
+                if(current_runs > max_runs):
+                    break
+                else:
+                    continue
+            elif tbd_url == 'wait':
+                self.logger.info("No open domains, waiting crawler.")
+                time.sleep(self.config.time_delay)
+                continue
+            
+            current_runs = 0
+
+            time.sleep(self.config.time_delay)
+
             self.logger.info(f'Trying to download {tbd_url}')
             resp = download(tbd_url, self.config, self.logger)
             self.logger.info(
@@ -39,4 +55,6 @@ class Worker(Thread):
                     self.frontier.add_url(scraped_url)
 
             self.frontier.mark_url_complete(tbd_url)
-            time.sleep(self.config.time_delay)
+            #time.sleep(self.config.time_delay)
+        
+        print('----ending worker----')
