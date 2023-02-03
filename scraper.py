@@ -27,7 +27,7 @@ def extract_next_links(url, resp, fingerprints):
 
     # need to decide if url or resp.url should be used
     #   url - requested url | resp.url - actual url
-    if(status_check.isValidStatus(resp) and is_valid(url)):
+    if(status_check.is_valid_status(resp) and is_valid(url)):
         links, text = parse_content.scrape_info(resp.raw_response.content, resp.url)
 
         tokens = word_tokenize(text.lower())
