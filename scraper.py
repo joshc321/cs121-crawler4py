@@ -8,6 +8,8 @@ from helpers.stopwords import EN_STOPWORDS
 from helpers.simhash import simhash, similarity
 
 
+LOW_VALUE = 25
+
 def scraper(url, resp, fingerprints):
     links = extract_next_links(url, resp, fingerprints)
     return [link for link in links if is_valid(link)]
@@ -37,6 +39,9 @@ def extract_next_links(url, resp, fingerprints):
         for stop_word in EN_STOPWORDS:
             if stop_word in token_freq:
                 token_freq.pop(stop_word)
+
+        if len(token_freq) < LOW_VALUE:
+            return []
 
         fingerprint = simhash(token_freq)
 
@@ -68,6 +73,9 @@ def is_valid(url):
         if url_check.is_valid_domain(parsed) == False:
             return False
 
+        if "archive.ics.uci.edu/ml/datasets.php" in url:
+            return False
+
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico|svg"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
@@ -83,7 +91,7 @@ def is_valid(url):
         raise
 
 def is_unique(fingerprints, fingerprint):
-    THRESHOLD = 0.96
+    THRESHOLD = 0.98
 
     if fingerprint in fingerprints:
         print('duplicate ', fingerprints[fingerprint])
