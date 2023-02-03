@@ -14,6 +14,7 @@ def is_valid_status(resp):
     # 4XX Client Error
     # 5XX Server Error
     # 600-606 Cache Error
-    if ((resp.status >= 200) and resp.status != 204 ):
+    if ((resp.status >= 200) and resp.status != 204 and resp.status <= 300):
         return True
+    
     return False
