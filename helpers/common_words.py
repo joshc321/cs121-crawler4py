@@ -12,8 +12,11 @@ from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 
 from collections import defaultdict
-from url_check import get_subdomain
 
+try:
+    from url_check import get_subdomain
+except ModuleNotFoundError:
+    from helpers.url_check import get_subdomain
 
 data_shelf_lock = Lock()
 
