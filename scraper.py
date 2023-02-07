@@ -80,6 +80,9 @@ def is_valid(url):
         if url_check.is_valid_domain(parsed) == False:
             return False
 
+        if url_check.is_permitted(parsed) == False:
+            return False
+
         if "archive.ics.uci.edu/ml/datasets.php" in url:
             return False
 
